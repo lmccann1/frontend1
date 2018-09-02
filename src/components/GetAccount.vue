@@ -1,0 +1,66 @@
+<template>
+    <div class="table">
+        <H1 align="center">ALL ACCOUNTS</H1>
+        <table align="center" class="getaccounttable">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Forename</th>
+            <th>Surname</th>
+            <th>DELETE/UPDATE</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="user_alias in GetAccount">
+            <td>{{user_alias.id}}</td>
+            <td>{{user_alias.forename}}</td>
+            <td>{{user_alias.surname}}</td>
+            <button type="submit" class="btn" @click="delUser(user_alias, id)">Delete</button>
+            <button type="submit" class="btn" @click="">Update</button>
+        </tr>
+    </tbody>
+    </table>
+    </div>
+
+</template>
+<script>
+  import axios from 'axios';
+  import index from 'vue-resource/src/http/client';
+
+  export default {
+    name: 'getaccount',
+    data() {
+      return {
+        GetAccount: [],
+      }
+    },
+    mounted() {
+      axios.get('http://localhost:9000/api/v1/accounts')
+        .then((response) => {
+          console.log(response.data);
+          this.GetAccount = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    methods: {
+      delUser(GetAccount, id) {
+        axios.delete('http://localhost:9000/api/v1/accounts' + id)
+          .then(response => this.GetAccount.splice(index, 1));
+
+        window.location.reload();
+
+      },
+    },
+  }
+
+
+
+</script>
+
+
+<style scoped>
+
+</style>
